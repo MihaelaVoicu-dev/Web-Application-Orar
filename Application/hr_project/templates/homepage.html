@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{%load static %}
+
+{% block content %}
+    <h2> Project developed in {{name}}</h2>
+    <p> This is my first template.</p>
+<p>Apasa butonul de download <img src="{% static 'giphy.gif' %}"></p>
+
+{% for obj in objects %}
+    {% if obj.id_an == "2022-2023" %}
+        <h1>Hello!</h1>
+    {% endif %}
+
+    {{ obj.id_an }}
+    {{ obj.an_nume }}
+    <br>
+{% endfor %}
+
+{% endblock %}
