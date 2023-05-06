@@ -21,16 +21,20 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 
 router.register(r'users', views.UserViewSet)
-router.register(r'materie', views.MaterieViewSet)
-router.register(r'zi', views.ZiViewSet)
-router.register(r'an', views.AnViewSet)
-router.register(r'profesor', views.ProfesorViewSet)
-router.register(r'grupa', views.GrupaViewSet)
-router.register(r'orar', views.OrarViewSet)
-router.register(r'sala', views.SalaViewSet)
+router.register(r'materiile_grupelor', views.Materiile_GrupelorViewSet)
+router.register(r'note_materie_student', views.Note_Materie_StudentViewSet)
+router.register(r'date_personale', views.Date_PersonaleViewSet)
+router.register(r'noutati', views.NoutatiViewSet)
+router.register(r'specializare', views.SpecializareViewSet)
+router.register(r'semestru', views.SemestruViewSet)
+router.register(r'an_studiu', views.An_StudiuViewSet)
+router.register(r'materiile_profesorului', views.Materiile_ProfesoruluiViewSet)
+router.register(r'mail', views.MailViewSet)
 urlpatterns = [
+    path('arhiva/', views.arhiva),
+    path('date_personale/', views.date_personale),
     path('admin/', admin.site.urls),
-    path('home/', views.homepage),
+    path('pagina_principala/', views.pagina_principala),
     path('index/', views.index),
     path('', include(router.urls)),
     path('api-auth', include('rest_framework.urls', namespace='rest_framework')),

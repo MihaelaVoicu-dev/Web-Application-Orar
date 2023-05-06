@@ -13,10 +13,10 @@ class MyModel(models.Model):
 class An_Studiu(MyModel):
     class Meta:
         db_table = 'an_studiu'
-        verbose_name_plural = 'ani_studiu'
+        verbose_name_plural = 'An Studiu'
 
     def __str__(self):
-        return self.an
+        return str(self.an)
 
     an = models.DecimalField(
         max_digits=2,
@@ -31,12 +31,12 @@ class Specializare(MyModel):
         db_table = 'specializare'
         verbose_name_plural = 'Specializari'
 
-    def str(self):
+    def __str__(self):
         return self.nume
 
     nume = models.CharField(
-            max_length=50,
-            null=False
+        max_length=50,
+        null=False
     )
 
 
@@ -46,7 +46,7 @@ class Semestru(MyModel):
         verbose_name_plural = 'semestre'
 
     def __str__(self):
-        return self.nr_semestru
+        return str(self.nr_semestru)
 
     nr_semestru = models.DecimalField(
         max_digits=2,
@@ -59,18 +59,29 @@ class Semestru(MyModel):
 class Date_Personale(models.Model):
     class Meta:
         db_table = 'date_personale'
-        verbose_name_plural = 'Date_Personale'
+        verbose_name_plural = 'Date Personale'
 
     def __str__(self):
-        return self.cnp
+        return self.nume
 
     CNP = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        unique=True
     )
 
-    def cnp(self):
+    def cnp_s(self):
         return self.CNP.username
+
+    cnp_s.short_description = "CNP"
+    cnp_s.admin_order_field = "CNP__username"
+
+    def adresa_mail(self):
+        return self.CNP.email
+
+    adresa_mail.short_description = "Adresa Mail"
+    adresa_mail.admin_order_field = "CNP__adresa_mail"
+
 
     nume = models.CharField(
         max_length=50,
@@ -102,10 +113,7 @@ class Date_Personale(models.Model):
     )
 
     adresa = models.CharField(
-        null=False
-    )
-
-    adresa_mail = models.CharField(
+        max_length=200,
         null=False
     )
 
@@ -128,7 +136,7 @@ class Date_Personale(models.Model):
 class Mail(MyModel):
     class Meta:
         db_table = 'mail'
-        verbose_name_plural = 'mailuri'
+        verbose_name_plural = 'Mail'
 
     def __str__(self):
         return self.titlu
@@ -137,8 +145,8 @@ class Mail(MyModel):
         max_length=50,
         null=False
     )
-    receptor = models.ForeignKey(Date_Personale, on_delete=models.CASCADE)
-    emitator = models.ForeignKey(Date_Personale, on_delete=models.CASCADE)
+    receptor = models.ForeignKey(Date_Personale, on_delete=models.CASCADE, related_name="receptor")
+    emitator = models.ForeignKey(Date_Personale, on_delete=models.CASCADE, related_name="emitator")
 
     def r_adresa_mail(self):
         return self.receptor.adresa_mail
@@ -152,6 +160,7 @@ class Mail(MyModel):
     e_adresa_mail.short_description = "Emitator"
     e_adresa_mail.admin_order_field = "emitator__adresa_mail"
     continut = models.CharField(
+        max_length=200,
         null=False
     )
 
@@ -170,23 +179,27 @@ class Materie(MyModel):
     )
 
     credite = models.DecimalField(
-        null=False
+        null=False,
+        decimal_places=0,
+        max_digits=100
     )
 
 
 class Materiile_Profesorului(MyModel):
     class Meta:
-        db_table = 'mail'
-        verbose_name_plural = 'mailuri'
+        db_table = 'materiile_profesorului'
+        verbose_name_plural = 'Materiile Profesorului'
 
     def __str__(self):
-        return f'{self.materie} {self.cnp}'
+        return f'{self.materie} {self.CNP_profesor}'
     titlu = models.CharField(
         max_length=50,
         null=False
     )
     materie = models.ForeignKey(Materie, on_delete=models.CASCADE)
-    CNP_profesor = models.ForeignKey(Date_Personale, on_delete=models.CASCADE)
+    CNP_profesor = models.ForeignKey(Date_Personale, on_delete=models.CASCADE,
+                                     limit_choices_to={'CNP__is_active': True, 'CNP__is_staff': True,
+                                                       'CNP__is_superuser': False})
 
     def m_materie(self):
         return self.materie.nume
@@ -195,10 +208,10 @@ class Materiile_Profesorului(MyModel):
     m_materie.admin_order_field = "materie__nume"
 
     def cnp_profesor(self):
-        return self.CNP_profesor.cnp
+        return self.CNP_profesor.nume
 
-    cnp_profesor.short_description = "CNP Profesor"
-    cnp_profesor.admin_order_field = "CNP_Profesor__cnp"
+    cnp_profesor.short_description = "Nume Profesor"
+    cnp_profesor.admin_order_field = "CNP_Profesor__nume"
 
 
 class Grupa(MyModel):
@@ -207,14 +220,14 @@ class Grupa(MyModel):
         verbose_name_plural = 'Grupe'
 
     def __str__(self):
-        return self.grupa
+        return self.id_grupa
 
     Specializare = models.ForeignKey(Specializare, on_delete=models.CASCADE)
 
     def id_specializare(self):
         return self.Specializare.nume
 
-    id_specializare.short_description = "ID"
+    id_specializare.short_description = "Specializare"
     id_specializare.admin_order_field = "Specializare__id_specializare"
 
     id_grupa = models.CharField(
@@ -223,7 +236,9 @@ class Grupa(MyModel):
     )
 
     an = models.DecimalField(
-        null=False
+        null=False,
+        max_digits=100,
+        decimal_places=0
     )
 
     grupa = models.CharField(
@@ -253,6 +268,12 @@ class Noutati(models.Model):
     )
 
     anunt = models.CharField(
+        max_length=200,
+        null=False
+    )
+
+    link = models.CharField(
+        max_length=200,
         null=False
     )
 
@@ -266,50 +287,60 @@ class Noutati(models.Model):
 class Materiile_Grupelor(MyModel):
     class Meta:
         db_table = 'materiile_grupelor'
-        verbose_name_plural = 'materiile_grupelor'
+        verbose_name_plural = 'Materiile Grupelor'
 
     def __str__(self):
-        return f'{self.Grupa.grupa} {self.Materie.nume}'
+        return f'{self.Grupa.id_grupa} {self.Materie.nume}'
 
     Materie = models.ForeignKey(Materie, on_delete=models.CASCADE)
     Grupa = models.ForeignKey(Grupa, on_delete=models.CASCADE)
 
-    ID = models.DecimalField(
+    ID_mat_grupa = models.DecimalField(
+        decimal_places=0,
+        max_digits=100,
         null=False
     )
 
     def id_grupa(self):
         return self.Grupa.grupa
 
-    id_grupa.short_description = "ID"
+    id_grupa.short_description = "Grupa"
     id_grupa.admin_order_field = "Grupa__id_grupa"
 
     def id_materie(self):
         return self.Materie.nume
 
-    id_materie.short_description = "ID"
-    id_grupa.admin_order_field = "Materie__nume"
-
+    id_materie.short_description = "Materie"
+    id_materie.admin_order_field = "Materie__nume"
 
 class Note_Materie_Student(MyModel):
     class Meta:
         db_table = 'note_materie_student'
-        verbose_name_plural = 'Note_materii_student'
+        verbose_name_plural = 'Note Materii Student'
 
     def __str__(self):
-        return self.nota
+        return str(self.nota)
 
-    Date_Personale = models.ForeignKey(Date_Personale, on_delete=models.CASCADE)
+    Date_Personale = models.ForeignKey(Date_Personale, on_delete=models.CASCADE,
+                                       limit_choices_to={'CNP__is_active': True, 'CNP__is_staff': False,
+                                                         'CNP__is_superuser': False})
+
     Materiile_Grupelor = models.ForeignKey(Materiile_Grupelor, on_delete=models.CASCADE)
 
     def id_date_personale(self):
-        return self.Date_Personale.cnp
+        return str(self.Date_Personale.nume)
 
-    id_date_personale.short_description = "ID"
-    id_date_personale.admin_order_field = "Id_date_personale__cnp"
+    id_date_personale.short_description = "Nume Student"
+    id_date_personale.admin_order_field = "Id_date_personale__nume"
 
     def id_materie_grupa(self):
-        return self.Materiile_Grupelor.ID
+        return str(self.Materiile_Grupelor.ID_mat_grupa)
 
-    id_materie_grupa.short_description = "ID"
-    id_materie_grupa.admin_order_field = "Id_materie_grupa__id_grupa"
+    id_materie_grupa.short_description = "ID Materie Grupa"
+    id_materie_grupa.admin_order_field = "Id_materie_grupa__ID_mat_grupa"
+
+    nota = models.DecimalField(
+        null=False,
+        decimal_places=0,
+        max_digits=100
+    )

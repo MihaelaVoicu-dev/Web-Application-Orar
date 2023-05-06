@@ -6,14 +6,16 @@
     <p> This is my first template.</p>
 <p>Apasa butonul de download <img src="{% static 'giphy.gif' %}"></p>
 
+<br>
 {% for obj in objects %}
-    {% if obj.id_an == "2022-2023" %}
-        <h1>Hello!</h1>
+    {% if obj.nume == "Calculatoare Romana" %}
+        {{ obj.sex }}
     {% endif %}
-
-    {{ obj.id_an }}
-    {{ obj.an_nume }}
     <br>
+{% endfor %}
+
+{% for obj in objects1 %}
+    <p>Hello!</p>
 {% endfor %}
 
 {% endblock %}

@@ -42,7 +42,7 @@ class Materiile_GrupelorSerializer(serializers.HyperlinkedModelSerializer):
 class Note_Materie_StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Note_Materie_Student
-        fields = ["url", "Date_Personale", "Materiile_Grupelor"]
+        fields = ["url", "Date_Personale", "Materiile_Grupelor", "nota"]
 
 
 class GrupaSerializer(serializers.HyperlinkedModelSerializer):
@@ -66,7 +66,7 @@ class An_StudiuSerializer(serializers.HyperlinkedModelSerializer):
 class MailSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Mail
-        fields = ["url", "titlu","emitator","receptor","continut"]
+        fields = ["url", "titlu", "emitator", "receptor","continut"]
 
 
 class Materiile_ProfesoruluiSerializer(serializers.HyperlinkedModelSerializer):
