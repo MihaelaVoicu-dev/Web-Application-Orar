@@ -1,22 +1,10 @@
 from django.contrib import admin
-# from .models import Employee, Employer
-from .models import Sala, Orar, Profesor, Materie, Zi, An, Grupa
-
-
-@admin.register(Materie)
-class MaterieAdmin(admin.ModelAdmin):
-    list_display = ["nume_materie"]
-
-    def get_queryset(self, request):
-        queryset = super().get_queryset(request)
-        user = request.user
-
-        return queryset
+from .models import *
 
 
 @admin.register(Grupa)
 class GrupaAdmin(admin.ModelAdmin):
-    list_display = ["an", "grupa"]
+    list_display = ["id_specializare", "an", "grupa", "subgrupa"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -25,9 +13,9 @@ class GrupaAdmin(admin.ModelAdmin):
         return queryset
 
 
-@admin.register(An)
-class AnAdmin(admin.ModelAdmin):
-    list_display = ["id_an"]
+@admin.register(Note_Materie_Student)
+class Note_Materie_StudentAdmin(admin.ModelAdmin):
+    list_display = ["id_date_personale", "id_materie_grupa"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -36,9 +24,9 @@ class AnAdmin(admin.ModelAdmin):
         return queryset
 
 
-@admin.register(Zi)
-class ZiAdmin(admin.ModelAdmin):
-    list_display = ["nume_zi"]
+@admin.register(Materiile_Grupelor)
+class Materiile_GrupelorAdmin(admin.ModelAdmin):
+    list_display = ["id_materie", "id_grupa"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -47,9 +35,9 @@ class ZiAdmin(admin.ModelAdmin):
         return queryset
 
 
-@admin.register(Sala)
-class SalaAdmin(admin.ModelAdmin):
-    list_display = ["id_sala", "nume_sala"]
+@admin.register(Materie)
+class MaterieAdmin(admin.ModelAdmin):
+    list_display = ["nume", "credite"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -58,9 +46,38 @@ class SalaAdmin(admin.ModelAdmin):
         return queryset
 
 
-@admin.register(Profesor)
-class ProfesorAdmin(admin.ModelAdmin):
-    list_display = ["CNP", "nume_profesor", "prenume_profesor"]
+@admin.register(An_Studiu)
+class An_StudiuAdmin(admin.ModelAdmin):
+    list_display = ["an"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        user = request.user
+
+        return queryset
+@admin.register(Semestru)
+class SemestruAdmin(admin.ModelAdmin):
+    list_display = ["nr_semestru"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        user = request.user
+
+        return queryset
+
+@admin.register(Materiile_Profesorului)
+class Materiile_ProfesoruluiAdmin(admin.ModelAdmin):
+    list_display = ["materie", "cnp_profesor"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        user = request.user
+
+        return queryset
+
+@admin.register(Mail)
+class MailAdmin(admin.ModelAdmin):
+    list_display = ["url", "titlu", " r_adresa_mail", "e_adresa_mail", "continut"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -69,15 +86,34 @@ class ProfesorAdmin(admin.ModelAdmin):
         return queryset
 
 
-@admin.register(Orar)
-class OrarAdmin(admin.ModelAdmin):
-    list_display = ["id_an", "g_an", "g_grupa", "nume_zi", "nume_materie", "nume_profesor","prenume_profesor", "id_sala", "inceput_ora", "sfarsit_ora"]
+@admin.register(Date_Personale)
+class Date_PersonaleAdmin(admin.ModelAdmin):
+    list_display = ["nume", "cnp", "sex", "nationalitate", "cetatenie", "telefon", "adresa", "adresa_mail", "id_semestru", "id_an_studiu"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         user = request.user
 
-        if user.is_staff and not user.is_superuser:
-            return queryset.filter(profesor__nume_profesor=user.first_name, profesor__prenume_profesor=user.last_name)
+        return queryset
+
+
+@admin.register(Specializare)
+class SpecializareAdmin(admin.ModelAdmin):
+    list_display = ["nume"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        user = request.user
+
+        return queryset
+
+
+@admin.register(Noutati)
+class NoutatiAdmin(admin.ModelAdmin):
+    list_display = ["titlu", "anunt", "id_adresa_mail"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        user = request.user
 
         return queryset
