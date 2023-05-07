@@ -1,24 +1,72 @@
+import os
+
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse, HttpResponseRedirect
+from django.template import loader
 from rest_framework import viewsets
 from rest_framework import permissions
 from .serializer import *
 from .models import *
 from django.shortcuts import render
 
+
 # def arhiva(request):
-#     return render(request, 'arhiva.html', {
-#         "name": "DJANGO"
-#     })
+#     files = []
+#     static_dir = os.path.join(settings.BASE_DIR, 'static/file_backup')
+#     for file_name in os.listdir(static_dir):
+#         file_path = os.path.join(static_dir, file_name)
+#         is_dir = os.path.isdir(file_path)
+#         url = f"{settings.STATIC_URL}{file_name}"
+#         files.append({'name': file_name, 'is_dir': is_dir, 'url': url})
+#     return render(request, 'arhiva.html', {'files': files})
 
 
-def home(request):
-    objects = Grupa_Student.objects.filter(Date_Student__User=request.user.id)
-    objects1 = Grupa.objects.filter()
-    objects2 = Specializare.objects.filter()
-    objects3 = Semestru.objects.filter()
-    context = {'objects': objects, 'objects1': objects1, 'objects2': objects2, 'objects3': objects3}
-    return render(request, 'homepage.html', context)
+def arhiva(request):
+    # Obțineți calea către directorul cu fișiere statice
+    static_dir = settings.STATICFILES_DIRS[0]
+
+    # Obțineți lista de fișiere din directorul cu fișiere statice
+    files = []
+    for root, _, filenames in os.walk(static_dir):
+        for filename in filenames:
+            files.append(os.path.join(root, filename))
+            files[len(files)-1].replace('\\', '/')
+
+    # Încărcați șablonul HTML pentru a afișa lista de fișiere
+    template = loader.get_template('arhiva.html')
+    context = {'files': files}
+
+    # Răspundeți cu șablonul HTML și lista de fișiere
+    return HttpResponse(template.render(context, request))
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                # Redirect to index page.
+                return HttpResponseRedirect("http://localhost:8000/date_personale/")
+            else:
+                # Return a 'disabled account' error message
+                return HttpResponse("You're account is disabled.")
+    else:
+        # the login is a  GET request, so just show the user the login form.
+        return render(request, 'sign_in.html')
+
+
+# def home(request):
+#     objects = Grupa_Student.objects.filter(Date_Student__User=request.user.id)
+#     objects1 = Grupa.objects.filter()
+#     objects2 = Specializare.objects.filter()
+#     objects3 = Semestru.objects.filter()
+#     context = {'objects': objects, 'objects1': objects1, 'objects2': objects2, 'objects3': objects3}
+#     return render(request, 'homepage.html', context)
+
 
 def date_personale(request):
     date = Date_Personale.objects.filter(User=request.user.id).first()

@@ -4,8 +4,8 @@ from .models import *
 
 @admin.register(Date_Personale)
 class Date_PersonaleAdmin(admin.ModelAdmin):
-    list_display = ["nume", "cnp_s", "sex", "nationalitate", "cetatenie", "telefon", "adresa", "adresa_mail",
-                    "id_semestru", "id_an_studiu"]
+    list_display = ["cnp", "adresa_mail", "nume", "sex", "nationalitate", "cetatenie", "data_nasterii", "telefon",
+                    "adresa"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -27,7 +27,7 @@ class SpecializareAdmin(admin.ModelAdmin):
 
 @admin.register(Noutati)
 class NoutatiAdmin(admin.ModelAdmin):
-    list_display = ["titlu", "anunt", "id_adresa_mail"]
+    list_display = ["titlu", "anunt", "adresa_mail", "link"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -38,7 +38,7 @@ class NoutatiAdmin(admin.ModelAdmin):
 
 @admin.register(Grupa)
 class GrupaAdmin(admin.ModelAdmin):
-    list_display = ["id_specializare", "an", "grupa", "subgrupa"]
+    list_display = ["id_grupa", "id_specializare", "an", "grupa", "subgrupa", "link"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -49,7 +49,7 @@ class GrupaAdmin(admin.ModelAdmin):
 
 @admin.register(Note_Materie_Student)
 class Note_Materie_StudentAdmin(admin.ModelAdmin):
-    list_display = ["id_date_personale", "id_materie_grupa", "nota"]
+    list_display = ["email_student", "id_materie_grupa", "nota"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -60,7 +60,7 @@ class Note_Materie_StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Materiile_Grupelor)
 class Materiile_GrupelorAdmin(admin.ModelAdmin):
-    list_display = ["id_materie", "id_grupa"]
+    list_display = ["ID_mat_grupa", "id_materie", "id_grupa"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -104,7 +104,7 @@ class SemestruAdmin(admin.ModelAdmin):
 
 @admin.register(Materiile_Profesorului)
 class Materiile_ProfesoruluiAdmin(admin.ModelAdmin):
-    list_display = ["materie", "cnp_profesor"]
+    list_display = ["email_profesor", "m_materie"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -116,6 +116,17 @@ class Materiile_ProfesoruluiAdmin(admin.ModelAdmin):
 @admin.register(Mail)
 class MailAdmin(admin.ModelAdmin):
     list_display = ["titlu", "r_adresa_mail", "e_adresa_mail", "continut"]
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        user = request.user
+
+        return queryset
+
+
+@admin.register(Grupa_Student)
+class Grupa_StudentAdmin(admin.ModelAdmin):
+    list_display = ["id_an_studiu", "id_grupa", "email_student", "link"]
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
