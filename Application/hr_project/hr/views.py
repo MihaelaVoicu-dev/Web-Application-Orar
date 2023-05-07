@@ -6,14 +6,22 @@ from .serializer import *
 from .models import *
 from django.shortcuts import render
 
-def arhiva(request):
-    return render(request, 'arhiva.html', {
-        "name": "DJANGO"
-    })
+# def arhiva(request):
+#     return render(request, 'arhiva.html', {
+#         "name": "DJANGO"
+#     })
 
+
+def home(request):
+    objects = Grupa_Student.objects.filter(Date_Student__User=request.user.id)
+    objects1 = Grupa.objects.filter()
+    objects2 = Specializare.objects.filter()
+    objects3 = Semestru.objects.filter()
+    context = {'objects': objects, 'objects1': objects1, 'objects2': objects2, 'objects3': objects3}
+    return render(request, 'homepage.html', context)
 
 def date_personale(request):
-    date = Date_Personale.objects.filter(CNP=request.user.id).first()
+    date = Date_Personale.objects.filter(User=request.user.id).first()
     context = {'date': date}
     return render(request, 'date_personale.html', context)
 
@@ -111,4 +119,10 @@ class Materiile_ProfesoruluiViewSet(viewsets.ModelViewSet):
 class MailViewSet(viewsets.ModelViewSet):
     queryset = Mail.objects.all()
     serializer_class = MailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class Grupa_StudentViewSet(viewsets.ModelViewSet):
+    queryset = Grupa_Student.objects.all()
+    serializer_class = Grupa_StudentSerializer
     permission_classes = [permissions.IsAuthenticated]

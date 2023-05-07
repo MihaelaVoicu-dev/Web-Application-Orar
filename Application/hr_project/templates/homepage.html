@@ -6,16 +6,23 @@
     <p> This is my first template.</p>
 <p>Apasa butonul de download <img src="{% static 'giphy.gif' %}"></p>
 
-<br>
-{% for obj in objects %}
-    {% if obj.nume == "Calculatoare Romana" %}
-        {{ obj.sex }}
-    {% endif %}
-    <br>
-{% endfor %}
 
-{% for obj in objects1 %}
-    <p>Hello!</p>
+{% for specializare in objects2 %}
+   {{specializare.nume}}
+    {% for grupa in objects1 %}
+        {% if specializare.nume == grupa.id_specializare %}
+
+            {% for user in objects %}
+                {% if user.grupa == grupa %}
+                    {{grupa.an}} {{grupa.grupa}} {{grupa.subgrupa}}
+                    {% for semestru in objects3 %}
+                         {{semestru.nr_semestru}} LINK
+                    {% endfor %}
+                {% endif %}
+            <br>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
 {% endfor %}
 
 {% endblock %}

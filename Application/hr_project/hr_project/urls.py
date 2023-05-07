@@ -30,8 +30,10 @@ router.register(r'semestru', views.SemestruViewSet)
 router.register(r'an_studiu', views.An_StudiuViewSet)
 router.register(r'materiile_profesorului', views.Materiile_ProfesoruluiViewSet)
 router.register(r'mail', views.MailViewSet)
+router.register(r'grupa_student', views.Grupa_StudentViewSet)
 urlpatterns = [
-    path('arhiva/', views.arhiva),
+    # path('arhiva/', views.arhiva),
+    path('home/', views.home),
     path('date_personale/', views.date_personale),
     path('admin/', admin.site.urls),
     path('pagina_principala/', views.pagina_principala),
