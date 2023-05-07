@@ -18,13 +18,14 @@ class SpecializareSerializer(serializers.HyperlinkedModelSerializer):
 class Date_PersonaleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Date_Personale
-        fields = ["url", "CNP", "nume", "sex", "nationalitate", "cetatenie", "telefon", "adresa", "adresa_mail", "semestru", "an_studiu"]
+        fields = ["url", "User", "nume", "sex", "nationalitate", "cetatenie", "data_nasterii",
+                  "telefon", "adresa"]
 
 
 class NoutatiSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Noutati
-        fields = ["url", "titlu", "anunt", "adresa_mail"]
+        fields = ["url", "titlu", "anunt", "Date_Personale", "link"]
 
 
 class MaterieSerializer(serializers.HyperlinkedModelSerializer):
@@ -42,13 +43,13 @@ class Materiile_GrupelorSerializer(serializers.HyperlinkedModelSerializer):
 class Note_Materie_StudentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Note_Materie_Student
-        fields = ["url", "Date_Personale", "Materiile_Grupelor", "nota"]
+        fields = ["url", "Date_Student", "Materiile_Grupelor", "nota"]
 
 
 class GrupaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Grupa
-        fields = ["url", "id_grupa",     "Specializare", "an", "grupa", "subgrupa"]
+        fields = ["url", "id_grupa", "Specializare", "an", "grupa", "subgrupa", "link"]
 
 
 class SemestruSerializer(serializers.HyperlinkedModelSerializer):
@@ -66,10 +67,16 @@ class An_StudiuSerializer(serializers.HyperlinkedModelSerializer):
 class MailSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Mail
-        fields = ["url", "titlu", "emitator", "receptor","continut"]
+        fields = ["url", "titlu", "emitator", "receptor", "continut"]
 
 
 class Materiile_ProfesoruluiSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Materiile_Profesorului
-        fields = ["url", "materie","CNP_profesor"]
+        fields = ["url", "Date_Profesor", "Materie"]
+
+
+class Grupa_StudentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Grupa_Student
+        fields = ["url", "Date_Student", "Grupa", ""]

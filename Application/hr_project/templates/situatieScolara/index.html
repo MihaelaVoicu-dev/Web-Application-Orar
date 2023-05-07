@@ -159,19 +159,31 @@
 
   <main>
     <div class="container">
-      <ul>
-   {% for specializare in objects2 %}
+        <ul>
+  {% for specializare in objects2 %}
+
     {% for grupa in objects1 %}
         {% if specializare.nume == grupa.id_specializare %}
+
             {% for user in objects %}
-                {% if user.grupa == grupa %}
-                         <li>{{grupa.id_specializare}}</li>>
-                    {% for semestru in objects3 %}
-                    if(
-                     <p>Anul{{grupa.an}}, grupa {{grupa.grupa}},semigrupa {{grupa.subgrupa}}, Semestru  {{semestru.nr_semestru}} LINK</p>
+                {% if user.Grupa == grupa %}
+                     <br>
+                    <li><strong>Specializare {{grupa.id_specializare}} Anul {{grupa.an}} Grupa {{grupa.grupa}} Subgrupa {{grupa.subgrupa}}
+                    </strong></li><br>
+                    {% for materieGrupa in objects5 %}
+                        {% if materieGrupa.Grupa == grupa %}
+                            {% for notMatStudent in objects4 %}
+                                {% if notMatStudent.Materiile_Grupelor.Materie == materieGrupa.Materie%}
+                                    {% if notMatStudent.Materiile_Grupelor.Grupa == materieGrupa.Grupa%}
+
+                                    Materie {{notMatStudent.Materiile_Grupelor.Materie.nume}} Nota {{notMatStudent.nota}}
+                                    <br>
+                                {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
-
             {% endfor %}
         {% endif %}
     {% endfor %}
