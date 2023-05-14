@@ -33,8 +33,11 @@ router.register(r'mail', views.MailViewSet)
 router.register(r'grupa_student', views.Grupa_StudentViewSet)
 urlpatterns = [
     path('sign_in/', views.user_login),
+    path('trimitere_mail/', views.send_email),
+    path('casuta_postala/', views.casutaPostala),
+    path('orar/', views.other_time_table),
     path('arhiva/', views.arhiva),
-    #path('home/', views.home),
+    path('situatie_scolara/', views.situatie_scolara),
     path('date_personale/', views.date_personale),
     path('admin/', admin.site.urls),
     path('pagina_principala/', views.pagina_principala),

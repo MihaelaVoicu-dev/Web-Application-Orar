@@ -1,7 +1,8 @@
-<!doctype html>
+
 {% load static %}
 <html lang="en">
 
+{% block content %}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,7 +13,11 @@
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
 
+
+
   <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+
+
 
   <style>
     .bd-placeholder-img {
@@ -94,7 +99,7 @@
             </a>
           </li>
           <li>
-            <a href="http://localhost:8000/orar" class="nav-link text-white">
+            <a href="http://localhost:8000/orar" class="nav-link text-secondary">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                 class="bi bi-house d-block mx-auto mb-1" viewBox="0 0 16 16">
                 <path
@@ -145,11 +150,11 @@
           <ul class="dropdown-menu text-small">
             <li><a class="dropdown-item" href="http://localhost:8000/date_personale" >Date Personale</a></li>
             <li><a class="dropdown-item" href="http://localhost:8000/admin">Admin</a></li>
-			<li><a class="dropdown-item text-secondary" href="http://localhost:8000/arhiva">Arhiva</a></li>
+			<li><a class="dropdown-item" href="http://localhost:8000/arhiva">Arhiva</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item" href="http://localhost:8000/sign_in">Deconectare</a></li>
+            <li><a class="dropdown-item" href="#">Deconectare</a></li>
           </ul>
         </div>
       </div>
@@ -158,36 +163,31 @@
 
   <main>
     <div class="container">
+      <h style="font-size: large;"><strong>SPECIALIZARI:</strong></h>
+      {% for obj in objects1 %}
+      <ul>
+        <li>{{obj.nume}}</li>
+        <ul>
+          {% for obj1 in objects2 %}
+            {% if obj1.id_specializare == obj.nume %}
+              <li>Anul {{obj1.an}} -&nbsp;<a href={{obj1.link}}>aici</a> </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
 
-      <br>
+      </ul>
+      {% endfor %}
 
-    {% block content %}
-
-      <h2>Arhiva</h2>
-      <br>
-    <ul>
-        {% for file in files %}
-            <li><a href="{{ file }}">{{ file }}</a></li>
-        {% endfor %}
-    </ul>
-
-
-{% endblock %}
     </div>
   </main>
 
-  <footer class="text-muted py-5">
-    <div class="container">
-      <p class="float-end mb-1">
-        <a href="#">Back to top</a>
-      </p>
-    </div>
-  </footer>
+  
 
 
-  <script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
 
 
 </body>
 
 </html>
+{% endblock %}

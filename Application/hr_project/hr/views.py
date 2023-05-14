@@ -12,15 +12,56 @@ from .models import *
 from django.shortcuts import render
 
 
-# def arhiva(request):
-#     files = []
-#     static_dir = os.path.join(settings.BASE_DIR, 'static/file_backup')
-#     for file_name in os.listdir(static_dir):
-#         file_path = os.path.join(static_dir, file_name)
-#         is_dir = os.path.isdir(file_path)
-#         url = f"{settings.STATIC_URL}{file_name}"
-#         files.append({'name': file_name, 'is_dir': is_dir, 'url': url})
-#     return render(request, 'arhiva.html', {'files': files})
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                # Redirect to index page.
+                return HttpResponseRedirect("http://localhost:8000/pagina_principala/")
+            else:
+                # Return a 'disabled account' error message
+                return HttpResponse("You're account is disabled.")
+    else:
+        # the login is a  GET request, so just show the user the login form.
+        return render(request, 'sign_in.html')
+
+
+def send_email(request):
+
+    if request.method == "POST":
+        titlu = request.POST.get('titlu')
+        receptor = request.POST.get('receptor')
+        obj1 = None
+        for obj1 in Date_Personale.objects.all():
+            if receptor == obj1.User.email:
+                break
+        emitator = request.user.email
+        obj2 = None
+        for obj2 in Date_Personale.objects.all():
+            if emitator == obj2.User.email:
+                emitator = obj2.User.email
+                break
+        continut = request.POST.get('continut')
+        obj = Mail(titlu=titlu, receptor=obj1, emitator=obj2, continut=continut)
+        obj.save()
+    return render(request, 'trimitere_mail.html')
+
+
+def other_time_table(request):
+    objects1 = Specializare.objects.filter()
+    objects2 = Grupa.objects.filter()
+    context = {'objects1': objects1, 'objects2': objects2}
+    return render(request, 'orar.html', context)
+
+
+def casutaPostala(request):
+    objects = Mail.objects.filter(receptor__User = request.user.id)
+    context = {'objects': objects}
+    return render(request, 'casuta_postala.html', context)
 
 
 def arhiva(request):
@@ -41,31 +82,17 @@ def arhiva(request):
     # Răspundeți cu șablonul HTML și lista de fișiere
     return HttpResponse(template.render(context, request))
 
-def user_login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                # Redirect to index page.
-                return HttpResponseRedirect("http://localhost:8000/date_personale/")
-            else:
-                # Return a 'disabled account' error message
-                return HttpResponse("You're account is disabled.")
-    else:
-        # the login is a  GET request, so just show the user the login form.
-        return render(request, 'sign_in.html')
 
-
-# def home(request):
-#     objects = Grupa_Student.objects.filter(Date_Student__User=request.user.id)
-#     objects1 = Grupa.objects.filter()
-#     objects2 = Specializare.objects.filter()
-#     objects3 = Semestru.objects.filter()
-#     context = {'objects': objects, 'objects1': objects1, 'objects2': objects2, 'objects3': objects3}
-#     return render(request, 'homepage.html', context)
+def situatie_scolara(request):
+    objects = Grupa_Student.objects.filter(Date_Student__User=request.user.id)
+    objects1 = Grupa.objects.filter()
+    objects2 = Specializare.objects.filter()
+    objects3 = Semestru.objects.filter()
+    objects4 = Note_Materie_Student.objects.filter(Date_Student__User__email=request.user.email)
+    objects5 = Materiile_Grupelor.objects.filter()
+    context = {'objects': objects, 'objects1': objects1, 'objects2': objects2,
+               'objects3': objects3, 'objects4': objects4, 'objects5': objects5}
+    return render(request, 'situatie_scolara.html', context)
 
 
 def date_personale(request):

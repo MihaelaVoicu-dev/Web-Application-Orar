@@ -1,72 +1,73 @@
-<!doctype html>
 {% load static %}
 <html lang="en">
-
+{% block content %}
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Hugo 0.108.0">
-  <title>Orar WEB - Orar</title>
+  <title>Orar WEB - Mailbox</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/album/">
 
-  <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+   <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 
   <style>
+    
     .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
-
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
       }
-    }
 
-    .b-example-divider {
-      height: 3rem;
-      background-color: rgba(0, 0, 0, .1);
-      border: solid rgba(0, 0, 0, .15);
-      border-width: 1px 0;
-      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-    }
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
 
-    .b-example-vr {
-      flex-shrink: 0;
-      width: 1.5rem;
-      height: 100vh;
-    }
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
 
-    .bi {
-      vertical-align: -.125em;
-      fill: currentColor;
-    }
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
 
-    .nav-scroller {
-      position: relative;
-      z-index: 2;
-      height: 2.75rem;
-      overflow-y: hidden;
-    }
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
 
-    .nav-scroller .nav {
-      display: flex;
-      flex-wrap: nowrap;
-      padding-bottom: 1rem;
-      margin-top: -1px;
-      overflow-x: auto;
-      text-align: center;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-    }
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    
   </style>
-  <link href="grid.css" rel="stylesheet">
+
 
 </head>
 
@@ -126,7 +127,7 @@
             </a>
           </li>
           <li>
-            <a href="http://localhost:8000/trimitere_mail" class="nav-link text-white">
+            <a href="http://localhost:8000/trimitere_mail" class="nav-link text-secondary">
               <svg class="bi d-block mx-auto mb-1" width="24" height="24" fill="currentColor"
               class="bi bi-house d-block mx-auto mb-1" viewBox="0 0 16 16">
                 <path
@@ -145,7 +146,7 @@
           <ul class="dropdown-menu text-small">
             <li><a class="dropdown-item" href="http://localhost:8000/date_personale" >Date Personale</a></li>
             <li><a class="dropdown-item" href="http://localhost:8000/admin">Admin</a></li>
-			<li><a class="dropdown-item text-secondary" href="http://localhost:8000/arhiva">Arhiva</a></li>
+			<li><a class="dropdown-item" href="http://localhost:8000/arhiva">Arhiva</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
@@ -156,38 +157,41 @@
     </div>
   </header>
 
-  <main>
-    <div class="container">
-
-      <br>
-
-    {% block content %}
-
-      <h2>Arhiva</h2>
-      <br>
-    <ul>
-        {% for file in files %}
-            <li><a href="{{ file }}">{{ file }}</a></li>
-        {% endfor %}
-    </ul>
-
-
-{% endblock %}
+  <main class="container">
+  <form method="POST" name="contactForm" class="contactForm">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon1">Catre</span>
+      <input type="text" class="form-control" name="receptor" placeholder="Nume Utilizator" aria-label="Nume Utilizator" aria-describedby="basic-addon1">
     </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text" id="basic-addon2">Subiect</span>
+      <input type="text" class="form-control" name="titlu" placeholder="Titlu" aria-label="Subiect" aria-describedby="basic-addon1">
+    </div>
+
+    <div class="input-group">
+      <input type="text" class="form-control" name="continut" placeholder="Continut mail" aria-label="With textarea" style="height: 232px;"></input>
+    </div>
+
+    <footer class="text-muted py-5">
+      <div>
+        <button type="submit" value ="submit" class="btn btn-primary" style="float: right; margin-right: 5px">Send</button>
+      </div>
+    </footer>
+
+  </form>
   </main>
 
-  <footer class="text-muted py-5">
-    <div class="container">
-      <p class="float-end mb-1">
-        <a href="#">Back to top</a>
-      </p>
-    </div>
-  </footer>
 
 
-  <script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
+  
+
+
+    <script src="{% static 'assets/dist/js/bootstrap.bundle.min.js' %}"></script>
 
 
 </body>
 
 </html>
+{% endblock %}

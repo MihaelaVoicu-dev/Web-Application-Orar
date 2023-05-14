@@ -220,11 +220,6 @@ class Materiile_Profesorului(MyModel):
     def __str__(self):
         return f'{self.Materie} {self.Date_Profesor}'
 
-    titlu = models.CharField(
-        max_length=50,
-        null=False
-    )
-
     Materie = models.ForeignKey(Materie, on_delete=models.CASCADE)
 
     def m_materie(self):
